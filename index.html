@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatrice Area Cerchio e Spesa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .result-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .comparison {
+            background: #fff4e6;
+            border-left-color: #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #e65100;
+        }
+
+        .discount-message {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .auto-calc {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .auto-calc h3 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Calcolatrice Interattiva</h1>
+        <p class="subtitle">Calcolo Area Cerchio e Gestione Spesa</p>
+
+        <!-- Sezione Calcolo Area Cerchio -->
+        <div class="section">
+            <h2>📐 Calcolo Area Cerchio</h2>
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <label for="raggioA">Raggio Cerchio A:</label>
+                    <input type="number" id="raggioA" value="15" step="0.1" min="0">
+                </div>
+                <div class="input-wrapper">
+                    <label for="raggioB">Raggio Cerchio B:</label>
+                    <input type="number" id="raggioB" value="20" step="0.1" min="0">
+                </div>
+            </div>
+            <button onclick="calcolaAree()">Calcola Aree</button>
+            <div id="risultatiAree" class="results" style="display: none;"></div>
+        </div>
+
+        <!-- Sezione Gestione Spesa -->
+        <div class="section">
+            <h2>💰 Gestione Spesa</h2>
+            <div class="input-wrapper">
+                <label for="totaleSpesa">Totale Spesa (€):</label>
+                <input type="number" id="totaleSpesa" value="110" step="0.01" min="0">
+            </div>
+            <button onclick="verificaSconto()">Verifica Sconto</button>
+            <div id="risultatoSpesa" class="results" style="display: none;"></div>
+        </div>
+
+        <!-- Sezione Calcolo Automatico (valori predefiniti) -->
+        <div class="section auto-calc">
+            <h3>⚡ Calcolo Automatico (Valori Predefiniti)</h3>
+            <button onclick="calcoloAutomatico()">Esegui Calcolo Automatico</button>
+            <div id="calcoloAutomatico" class="results" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+// --- FUNZIONE PER L'AREA DEL CERCHIO ---
+// Questa funzione accetta un raggio (numero) e restituisce l'area (numero)
+function calcolaAreaCerchio(raggio) {
+    const pi = 3.14159;
+    return pi * (raggio ** 2);
+}
+
+// --- FUNZIONI PER L'INTERFACCIA HTML ---
+// Calcola le aree dei cerchi A e B e mostra i risultati
+function calcolaAree() {
+    const raggioAInput = document.getElementById('raggioA');
+    const raggioBInput = document.getElementById('raggioB');
+    const risultatiDiv = document.getElementById('risultatiAree');
+    if (!raggioAInput || !raggioBInput || !risultatiDiv) {
+        return;
+    }
+    const raggioA = parseFloat(raggioAInput.value);
+    const raggioB = parseFloat(raggioBInput.value);
+    if (isNaN(raggioA) || isNaN(raggioB) || raggioA < 0 || raggioB < 0) {
+        risultatiDiv.innerHTML = '<div class="result-item" style="background: #ffebee; border-left-color: #f44336; color: #c62828;">⚠️ Inserisci valori validi e positivi per i raggi!</div>';
+        risultatiDiv.style.display = 'block';
+        return;
+    }
+    const areaA = calcolaAreaCerchio(raggioA);
+    const areaB = calcolaAreaCerchio(raggioB);
+    let html = `
+        <div class="result-item">
+            <div class="result-label">Area del cerchio A (raggio ${raggioA}):</div>
+            <div class="result-value">${areaA.toFixed(2)} unità²</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Area del cerchio B (raggio ${raggioB}):</div>
+            <div class="result-value">${areaB.toFixed(2)} unità²</div>
+        </div>
+    `;
+    // Confronto
+    if (areaB > areaA) {
+        html += `<div class="comparison">📊 Il cerchio B è più grande del cerchio A (differenza: ${(areaB - areaA).toFixed(2)} unità²)</div>`;
+    } else if (areaA > areaB) {
+        html += `<div class="comparison">📊 Il cerchio A è più grande del cerchio B (differenza: ${(areaA - areaB).toFixed(2)} unità²)</div>`;
+    } else {
+        html += `<div class="comparison">📊 I due cerchi hanno la stessa area!</div>`;
+    }
+    risultatiDiv.innerHTML = html;
+    risultatiDiv.style.display = 'block';
+}
+
+// Verifica se la spesa supera la soglia per lo sconto
+function verificaSconto() {
+    const totaleSpesaInput = document.getElementById('totaleSpesa');
+    const risultatoDiv = document.getElementById('risultatoSpesa');
+    if (!totaleSpesaInput || !risultatoDiv) {
+        return;
+    }
+    const totaleSpesa = parseFloat(totaleSpesaInput.value);
+    const sogliaSconto = 100;
+    if (isNaN(totaleSpesa) || totaleSpesa < 0) {
+        risultatoDiv.innerHTML = '<div class="result-item" style="background: #ffebee; border-left-color: #f44336; color: #c62828;">⚠️ Inserisci un valore valido per la spesa!</div>';
+        risultatoDiv.style.display = 'block';
+        return;
+    }
+    let html = `
+        <div class="result-item">
+            <div class="result-label">Totale Spesa:</div>
+            <div class="result-value">€${totaleSpesa.toFixed(2)}</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Soglia Sconto:</div>
+            <div class="result-value">€${sogliaSconto.toFixed(2)}</div>
+        </div>
+    `;
+    if (totaleSpesa > sogliaSconto) {
+        const sconto = totaleSpesa * 0.10;
+        const totaleFinale = totaleSpesa - sconto;
+        html += `
+            <div class="discount-message">
+                🎉 Spesa di €${totaleSpesa.toFixed(2)}: Hai diritto allo sconto del 10%!
+            </div>
+            <div class="result-item" style="margin-top: 15px;">
+                <div class="result-label">Sconto Applicato (10%):</div>
+                <div class="result-value">-€${sconto.toFixed(2)}</div>
+            </div>
+            <div class="result-item" style="background: #e8f5e9; border-left-color: #4caf50;">
+                <div class="result-label">Totale Finale:</div>
+                <div class="result-value" style="color: #2e7d32; font-size: 1.5em;">€${totaleFinale.toFixed(2)}</div>
+            </div>
+        `;
+    } else {
+        const mancante = sogliaSconto - totaleSpesa;
+        html += `
+            <div class="result-item" style="background: #fff3e0; border-left-color: #ff9800; color: #e65100;">
+                ⚠️ Spesa di €${totaleSpesa.toFixed(2)}: Non hai ancora raggiunto la soglia per lo sconto.<br>
+                Mancano €${mancante.toFixed(2)} per ottenere lo sconto del 10%!
+            </div>
+        `;
+    }
+    risultatoDiv.innerHTML = html;
+    risultatoDiv.style.display = 'block';
+}
+
+// Calcolo automatico con i valori predefiniti (come nel file Index.ts originale)
+function calcoloAutomatico() {
+    const risultatoDiv = document.getElementById('calcoloAutomatico');
+    if (!risultatoDiv) {
+        return;
+    }
+    // --- UTILIZZO DELLA FUNZIONE ---
+    const raggioA = 15;
+    const raggioB = 20;
+    const areaA = calcolaAreaCerchio(raggioA);
+    const areaB = calcolaAreaCerchio(raggioB);
+    let html = `
+        <h3 style="color: #667eea; margin-bottom: 15px;">Risultati Calcolo Automatico</h3>
+        <div class="result-item">
+            <div class="result-label">Area del cerchio A (raggio ${raggioA}):</div>
+            <div class="result-value">${areaA.toFixed(2)} unità²</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">Area del cerchio B (raggio ${raggioB}):</div>
+            <div class="result-value">${areaB.toFixed(2)} unità²</div>
+        </div>
+    `;
+    // Esempio di confronto
+    if (areaB > areaA) {
+        html += `<div class="comparison">Il cerchio B è più grande del cerchio A</div>`;
+    }
+    // --- PARTE SPESA ---
+    const totaleSpesa = 110;
+    const sogliaSconto = 100;
+    html += `
+        <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #e0e0e0;">
+            <div class="result-item">
+                <div class="result-label">Spesa:</div>
+                <div class="result-value">€${totaleSpesa}</div>
+            </div>
+    `;
+    if (totaleSpesa > sogliaSconto) {
+        html += `<div class="discount-message">Spesa di €${totaleSpesa}: Hai diritto allo sconto!</div>`;
+    }
+    html += `</div>`;
+    risultatoDiv.innerHTML = html;
+    risultatoDiv.style.display = 'block';
+}
+
+// Esegui calcolo automatico al caricamento della pagina
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Applicazione caricata!');
+});
+    </script>
+</body>
+</html>
